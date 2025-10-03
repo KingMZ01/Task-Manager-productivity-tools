@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Health & Productivity Helpers - Task Manager</title>
+	<link rel="icon" type="image/png" href="Logo/Tab-logo.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="darktheme.css">
+</head>
+<body>
+	<!-- Background Canvas (theme-driven) -->
+	<canvas id="bg-canvas" aria-hidden="true"></canvas>
+	<!-- DOM Background (used for Dark theme honeycomb) -->
+	<div id="bg-dom" aria-hidden="true"></div>
+
+	<!-- Light theme bubbles (hidden in other themes) -->
+	<div id="bubbles" aria-hidden="true">
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+	</div>
+
+	<div id="app">
+		<nav class="navbar glass">
+			<div class="nav-left">
+				<div class="logo">
+					<img src="Logo/Home-logo.png" alt="Task Manager Logo" class="logo-img" />
+					<span class="logo-text">TaskManager</span>
+				</div>
+				<a class="nav-link" href="index.html">Home</a>
+			</div>
+			<div class="nav-right">
+				<a class="nav-link" href="#" style="opacity: 1; font-weight: 600;">Health & Productivity Helpers</a>
+				<a class="nav-link" href="about.html">About</a>
+			</div>
+		</nav>
+
+		<header class="hero">
+			<h1>Health & Productivity Helpers</h1>
+			<p>Take care of yourself while you work 💧👁️</p>
+		</header>
+
+		<main class="main custom-scrollbar">
+			<!-- Water Reminder Widget -->
+			<section class="health-card glass">
+				<div class="health-header">
+					<h2>💧 Water Reminder</h2>
+					<p>Stay hydrated for better focus and productivity</p>
+				</div>
+				
+				<div class="health-controls">
+					<div class="interval-setting">
+						<label for="water-interval">Reminder interval (minutes):</label>
+						<select id="water-interval">
+							<option value="30">30 minutes</option>
+							<option value="60" selected>60 minutes</option>
+							<option value="custom">Custom...</option>
+						</select>
+						<input type="number" id="water-custom-interval" class="custom-interval-input" placeholder="Enter minutes" min="1" max="480" style="display: none;">
+					</div>
+					
+					<div class="control-buttons">
+						<button id="water-start" class="btn primary">Start Reminders</button>
+						<button id="water-stop" class="btn ghost" disabled>Stop Reminders</button>
+					</div>
+				</div>
+				
+				<div class="health-status">
+					<div id="water-status" class="status-text">Water reminders are off</div>
+					<div id="water-next" class="next-reminder"></div>
+				</div>
+			</section>
+
+			<!-- Eye Rest Reminder Widget -->
+			<section class="health-card glass">
+				<div class="health-header">
+					<h2>👁️ Eye Rest Reminder</h2>
+					<p>Follow the 20-20-20 rule: Every 20 minutes, look at something 20 feet away for 20 seconds</p>
+				</div>
+				
+				<div class="health-controls">
+					<div class="interval-setting">
+                    <label for="eye-interval">Reminder interval (minutes):</label>
+                        <select id="eye-interval">
+                            <option value="20" selected>20 minutes</option>
+                            <option value="40">40 minutes</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                        <input type="number" id="eye-custom-interval" class="custom-interval-input" placeholder="Enter minutes" min="1" max="240" style="display: none;">
+					</div>
+					
+                    <div class="control-buttons">
+                        <div class="setting-group">
+                            <label for="eye-rest">Rest/Break (seconds):</label>
+                            <select id="eye-rest">
+                                <option value="20" selected>20 seconds</option>
+                                <option value="30">30 seconds</option>
+                                <option value="custom">Custom...</option>
+                            </select>
+                            <input type="number" id="eye-rest-custom" class="custom-interval-input" placeholder="Enter seconds" min="5" max="600" style="display: none;">
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:flex-end;">
+                            <button id="eye-start" class="btn primary">Start Reminders</button>
+                            <button id="eye-stop" class="btn ghost" disabled>Stop Reminders</button>
+                        </div>
+                    </div>
+				</div>
+				
+				<div class="health-status">
+					<div id="eye-status" class="status-text">Eye rest reminders are off</div>
+					<div id="eye-next" class="next-reminder"></div>
+				</div>
+			</section>
+
+			<!-- Daily Goals -->
+			<section class="health-card glass">
+				<div class="health-header">
+					<h2>📊 Daily Health Goals</h2>
+					<p>Track your healthy habits</p>
+				</div>
+				
+				<div class="goals-grid custom-scrollbar">
+                    <div class="goal-item">
+                        <div class="goal-icon water">💧</div>
+						<div class="goal-info">
+							<div class="goal-label">Water glasses</div>
+							<div class="goal-counter">
+								<button id="water-minus" class="counter-btn">-</button>
+								<span id="water-count">0</span>
+								<button id="water-plus" class="counter-btn">+</button>
+							</div>
+							<div class="goal-target">Goal: 8 glasses</div>
+						</div>
+					</div>
+					
+					<div class="goal-item">
+						<div class="goal-icon">👁️</div>
+						<div class="goal-info">
+							<div class="goal-label">Eye breaks taken</div>
+							<div class="goal-counter">
+								<span id="eye-breaks-count">0</span>
+							</div>
+							<div class="goal-target">Automatic tracking</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="footer glass">
+			<p>© 2025 Task Manager | Designed with Mohammad Zakariya</p>
+		</footer>
+	</div>
+
+	<!-- Theme Switcher Floating Button -->
+	<button id="theme-btn" class="theme-btn" aria-haspopup="true" aria-expanded="false" aria-controls="theme-menu" title="Change theme">🎨</button>
+	<div id="theme-menu" class="theme-menu" role="menu" aria-hidden="true">
+		<button class="theme-option preview light" data-theme="light" role="menuitem" aria-label="Light – Bubbles">
+			<span class="thumb"><span class="thumb-bubbles"></span></span>
+			<span class="label">Light</span>
+			<span class="hint">Light – Bubbles</span>
+		</button>
+		<button class="theme-option preview dark" data-theme="dark" role="menuitem" aria-label="Dark – Honeycomb">
+			<span class="thumb"><span class="thumb-honey"></span></span>
+			<span class="label">Dark</span>
+			<span class="hint">Dark – Honeycomb</span>
+		</button>
+		<button class="theme-option preview multi" data-theme="multicolor" role="menuitem" aria-label="Multicolor – Aurora">
+			<span class="thumb"><span class="thumb-aurora"></span></span>
+			<span class="label">Multicolor</span>
+			<span class="hint">Multicolor – Aurora</span>
+		</button>
+	</div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-content">
+            <h3 id="notification-title">Notification</h3>
+            <p id="notification-message">Message here</p>
+            <button id="notification-close" class="btn primary">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Task Manager</title>
+	<link rel="icon" type="image/png" href="Logo/Tab-logo.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="darktheme.css">
+</head>
+<body>
+	<!-- Background Canvas (theme-driven) -->
+	<canvas id="bg-canvas" aria-hidden="true"></canvas>
+	<!-- DOM Background (used for Dark theme honeycomb) -->
+	<div id="bg-dom" aria-hidden="true"></div>
+
+	<!-- Light theme bubbles (hidden in other themes) -->
+	<div id="bubbles" aria-hidden="true">
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+		<div class="bubble"></div>
+	</div>
+
+	<div id="app">
+		<nav class="navbar glass">
+			<div class="nav-left">
+				<div class="logo">
+					<img src="Logo/Home-logo.png" alt="Task Manager Logo" class="logo-img" />
+					<span class="logo-text">TaskManager</span>
+				</div>
+				<a class="nav-link" href="#">Home</a>
+			</div>
+			<div class="nav-right">
+				<a class="nav-link" href="health.html">Health & Productivity Helpers</a>
+				<a class="nav-link" href="about.html">About</a>
+			</div>
+		</nav>
+
+		<header class="hero">
+			<h1>Task Manager</h1>
+			<p>Stay productive and track your progress 🚀</p>
+		</header>
+
+        <main class="main custom-scrollbar">
+			<!-- Task Management Section -->
+			<section class="task-card glass">
+				<!-- Task Input with Priority -->
+				<div class="task-input-section">
+					<div class="task-input-row">
+						<input id="task-input" type="text" placeholder="Add a new task..." maxlength="120" />
+                        <select id="task-priority" class="priority-select">
+                            <option value="high">🔴 High</option>
+                            <option value="medium" selected>🟡 Medium</option>
+                            <option value="low">🟢 Low</option>
+                        </select>
+						<button id="add-btn" class="btn primary">Add</button>
+					</div>
+				</div>
+
+				<!-- Search, Filter & Sort Controls -->
+				<div class="controls-section">
+					<div class="search-row">
+						<input id="search-input" type="text" placeholder="Search tasks..." class="search-input" />
+						<button id="clear-search" class="btn ghost">Clear</button>
+					</div>
+					
+					<div class="filter-sort-row">
+						<div class="filter-group">
+							<label for="priority-filter">Filter by priority:</label>
+							<select id="priority-filter">
+								<option value="all">All</option>
+								<option value="high">🔴 High</option>
+								<option value="medium">🟡 Medium</option>
+								<option value="low">🟢 Low</option>
+							</select>
+						</div>
+						
+						<div class="sort-group">
+							<label for="sort-tasks">Sort by:</label>
+							<select id="sort-tasks">
+								<option value="created">Date Created</option>
+								<option value="priority">Priority</option>
+								<option value="status">Completion Status</option>
+								<option value="alphabetical">Alphabetical</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- Progress Bar -->
+				<div class="progress-row">
+					<div class="progress">
+						<div id="progress-bar" class="progress-bar"></div>
+					</div>
+					<div id="progress-label" class="progress-label">0% completed</div>
+				</div>
+
+				<!-- Task List with Drag & Drop -->
+				<ul id="task-list" class="task-list custom-scrollbar" aria-live="polite"></ul>
+			</section>
+
+			<!-- Pomodoro Timer Widget -->
+			<section class="pomodoro-card glass">
+                <div class="pomodoro-header">
+                    <h2>🍅 Pomodoro Focus Timer</h2>
+                    <p id="timer-desc">25 min focus • 5 min break • 15 min long break (every 4 cycles)</p>
+                </div>
+				
+				<div class="timer-display">
+					<div id="timer-time" class="timer-time">25:00</div>
+					<div id="timer-session" class="timer-session">Focus Session</div>
+					<div id="timer-cycle" class="timer-cycle">Cycle 1 of 4</div>
+				</div>
+				
+				<div class="timer-controls">
+					<button id="timer-start" class="btn primary">Start</button>
+					<button id="timer-pause" class="btn ghost" disabled>Pause</button>
+					<button id="timer-reset" class="btn ghost">Reset</button>
+				</div>
+				
+				<div class="timer-settings">
+					<div class="setting-group">
+						<label for="focus-duration">Focus (min):</label>
+						<input type="number" id="focus-duration" value="25" min="1" max="60" />
+					</div>
+					<div class="setting-group">
+						<label for="break-duration">Short break (min):</label>
+						<input type="number" id="break-duration" value="5" min="1" max="30" />
+					</div>
+					<div class="setting-group">
+						<label for="long-break-duration">Long break (min):</label>
+						<input type="number" id="long-break-duration" value="15" min="1" max="60" />
+					</div>
+                    <div class="setting-group">
+                        <label for="cycle-count">Cycles before long break:</label>
+                        <input type="number" id="cycle-count" value="4" min="1" max="10" />
+                    </div>
+				</div>
+			</section>
+
+			<!-- Stats & History Section -->
+			<section class="stats-card glass">
+				<div class="stats-header">
+					<h2>📊 Productivity Stats</h2>
+					<p>Track your progress and maintain your streak</p>
+				</div>
+				
+				<div class="stats-summary">
+					<div class="stat-item">
+						<div class="stat-number" id="tasks-today">0</div>
+						<div class="stat-label">Tasks Today</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number" id="tasks-week">0</div>
+						<div class="stat-label">This Week</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number" id="current-streak">0</div>
+						<div class="stat-label">Day Streak</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number" id="pomodoros-today">0</div>
+						<div class="stat-label">Pomodoros Today</div>
+					</div>
+				</div>
+				
+				<div class="chart-container">
+					<h3>Weekly Task Completion</h3>
+					<canvas id="stats-chart" width="400" height="200"></canvas>
+				</div>
+				
+				<div class="achievements">
+					<h3>Recent Achievements</h3>
+					<div id="achievements-list" class="achievements-list">
+						<div class="achievement">🎯 First task completed!</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Health Dashboard Widget -->
+			<section class="health-dashboard glass">
+				<div class="health-dashboard-header">
+					<h3>🖼️ Health Dashboard</h3>
+					<p>Track your wellness habits</p>
+				</div>
+				
+				<div class="dashboard-widgets">
+					<div class="dashboard-widget">
+						<div class="widget-icon">💧</div>
+						<div class="widget-info">
+							<div class="widget-title">Water Reminder</div>
+							<div id="water-widget-status" class="widget-status">Not active</div>
+							<div id="water-widget-timer" class="widget-timer"></div>
+						</div>
+					</div>
+					
+					<div class="dashboard-widget">
+						<div class="widget-icon">👁️</div>
+						<div class="widget-info">
+							<div class="widget-title">Eye Care</div>
+							<div id="eye-widget-status" class="widget-status">Not active</div>
+							<div id="eye-widget-timer" class="widget-timer"></div>
+						</div>
+					</div>
+				</div>
+				
+                <div class="widget-actions" style="display:flex; gap:10px; justify-content:center; align-items:center;">
+                    <button id="toggle-water" class="btn ghost">💧 Water: Off</button>
+                    <button id="toggle-eye" class="btn ghost">👁️ Eye: Off</button>
+                    <a href="health.html" class="btn ghost">Configure Health Helpers →</a>
+                </div>
+			</section>
+		</main>
+
+		<footer class="footer glass">
+			<p>2025 Task Manager with Progress Tracker. All Rights Reserved. | Designed with Mohammad Zakariya</p>
+		</footer>
+	</div>
+
+	<!-- Theme Switcher Floating Button -->
+	<button id="theme-btn" class="theme-btn" aria-haspopup="true" aria-expanded="false" aria-controls="theme-menu" title="Change theme">🎨</button>
+	<div id="theme-menu" class="theme-menu" role="menu" aria-hidden="true">
+		<button class="theme-option preview light" data-theme="light" role="menuitem" aria-label="Light – Bubbles">
+			<span class="thumb"><span class="thumb-bubbles"></span></span>
+			<span class="label">Light</span>
+			<span class="hint">Light – Bubbles</span>
+		</button>
+		<button class="theme-option preview dark" data-theme="dark" role="menuitem" aria-label="Dark – Honeycomb">
+			<span class="thumb"><span class="thumb-honey"></span></span>
+			<span class="label">Dark</span>
+			<span class="hint">Dark – Honeycomb</span>
+		</button>
+		<button class="theme-option preview multi" data-theme="multicolor" role="menuitem" aria-label="Multicolor – Aurora">
+			<span class="thumb"><span class="thumb-aurora"></span></span>
+			<span class="label">Multicolor</span>
+			<span class="hint">Multicolor – Aurora</span>
+		</button>
+	</div>
+
+	<!-- Notification Modal -->
+	<div id="notification-modal" class="notification-modal">
+		<div class="notification-content">
+			<h3 id="notification-title">Notification</h3>
+			<p id="notification-message">Message here</p>
+			<button id="notification-close" class="btn primary">OK</button>
+		</div>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+</html>
+
+

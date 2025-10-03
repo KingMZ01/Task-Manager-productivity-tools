@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>About • Task Manager</title>
+	<link rel="icon" type="image/png" href="Logo/Tab-logo.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="darktheme.css">
+</head>
+<body class="theme-light">
+	<!-- Background layers -->
+	<canvas id="bg-canvas" aria-hidden="true"></canvas>
+	<div id="bg-dom" aria-hidden="true"></div>
+
+	<div id="app">
+		<nav class="navbar glass">
+			<div class="nav-left">
+				<div class="logo">
+					<img src="Logo/Home-logo.png" alt="Task Manager Logo" class="logo-img" />
+					<span class="logo-text">TaskManager</span>
+				</div>
+				<a class="nav-link" href="index.html">Home</a>
+			</div>
+			<div class="nav-right">
+				<a class="nav-link" href="health.html">Health & Productivity Helpers</a>
+				<a class="nav-link active" href="about.html" target="_blank">About</a>
+			</div>
+		</nav>
+
+		<header class="hero">
+			<h1>About this app ✨</h1>
+			<p>A lightweight, themeful, privacy-friendly Task Manager with Health Helpers.</p>
+		</header>
+
+		<main class="main custom-scrollbar">
+			<section class="glass" style="width: min(900px, 92vw); padding: 18px; border-radius: 16px;">
+				<div class="about-intro" style="display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+					<div>
+						<h2 style="margin:0 0 6px 0;">Project Overview</h2>
+						<p style="margin:0; color:#64748b;">Built with LocalStorage, accessible UI, and delightful themes: Light (bubbles), Dark (honeycomb), Multicolor (aurora).</p>
+					</div>
+					<div class="about-screenshot">
+						<img src="assets/about-screenshot.png" alt="About screenshot" onerror="this.style.display='none'" />
+					</div>
+				</div>
+
+				<div class="accordion" id="about-accordion">
+					<!-- Overview -->
+					<div class="accordion-item">
+						<button class="accordion-header blue" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-1">
+							<span class="accordion-title">Overview</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-1" class="accordion-body" hidden>
+							<p>This app helps you manage tasks, stay focused with Pomodoro, and take care of your health with audio-friendly and notification-aware reminders. Everything is stored locally in your browser using LocalStorage.</p>
+						</div>
+					</div>
+
+					<!-- Features -->
+					<div class="accordion-item">
+						<button class="accordion-header green" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-2">
+							<span class="accordion-title">Features</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-2" class="accordion-body" hidden>
+							<ul>
+								<li>Task Manager: priorities (🔴/🟡/🟢), search, filter, sort, drag & drop</li>
+								<li>Progress + Stats: weekly chart, streaks, achievements</li>
+								<li>Theme system: Light (bubbles), Dark (honeycomb), Multicolor (aurora)</li>
+								<li>Health Helpers: Water and Eye Reminders with notifications + fallback</li>
+								<li>Phase 2: Pomodoro timer, dashboard widgets, advanced filters</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- How it works -->
+					<div class="accordion-item">
+						<button class="accordion-header purple" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-3">
+							<span class="accordion-title">How it works</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-3" class="accordion-body" hidden>
+							<p>All data is stored locally using LocalStorage keys:</p>
+							<pre><code>tm_tasks, tm_theme, tm_pomodoro, tm_stats,
+tm_waterInterval, tm_waterActive, tm_waterLast,
+tm_eyeIntervalMin, tm_eyeRestSec, tm_eyeActive, tm_eyeLast,
+tm_about_last_visited
+</code></pre>
+							<p>Example:</p>
+							<pre><code>// tasks example
+[{ id: "abc123", title: "Write docs", completed: false, priority: "high", createdAt: 1710000000000 }]
+</code></pre>
+						</div>
+					</div>
+
+					<!-- Health & Productivity Helpers -->
+					<div class="accordion-item">
+						<button class="accordion-header gray" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-4">
+							<span class="accordion-title">Health & Productivity Helpers</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-4" class="accordion-body" hidden>
+							<p>Reminders ask for Notification permission. If denied, the app shows an in-app modal. Timers persist and resume while the page stays open.</p>
+							<ul>
+								<li>Water: interval in minutes, persisted</li>
+								<li>Eye: interval in minutes + rest seconds, persisted</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Task Manager -->
+					<div class="accordion-item">
+						<button class="accordion-header orange" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-tasks">
+							<span class="accordion-title">Task Manager</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-tasks" class="accordion-body" hidden>
+							<p>Create, edit, complete, and delete tasks. The progress bar updates live as you complete tasks. Priorities (🔴 / 🟡 / 🟢) help you focus on what matters.</p>
+						</div>
+					</div>
+
+					<!-- Pomodoro Focus Timer -->
+					<div class="accordion-item">
+						<button class="accordion-header purple" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-pomo">
+							<span class="accordion-title">Pomodoro Focus Timer</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-pomo" class="accordion-body" hidden>
+							<p>Default 25/5 cycles with a long break every few sessions. Desktop notifications and in-app fallback help you stay in the flow.</p>
+						</div>
+					</div>
+
+					<!-- Productivity Stats -->
+					<div class="accordion-item">
+						<button class="accordion-header green" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-stats">
+							<span class="accordion-title">Productivity Stats</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-stats" class="accordion-body" hidden>
+							<p>Tracks daily and weekly completions, shows a weekly chart, and keeps a streak counter to motivate consistency.</p>
+						</div>
+					</div>
+
+					<!-- Water Reminder -->
+					<div class="accordion-item">
+						<button class="accordion-header blue" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-water">
+							<span class="accordion-title">Water Reminder</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-water" class="accordion-body" hidden>
+							<p>Hydration notifications with configurable intervals. Uses browser notifications when allowed, otherwise shows an in-app popup.</p>
+						</div>
+					</div>
+
+					<!-- Eye Rest Reminder -->
+					<div class="accordion-item">
+						<button class="accordion-header gray" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-eye">
+							<span class="accordion-title">Eye Rest Reminder</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-eye" class="accordion-body" hidden>
+							<p>Follows the 20–20–20 rule with customizable reminder minutes and rest seconds. Great for reducing eye strain.</p>
+						</div>
+					</div>
+
+					<!-- Phase 2 Roadmap / And More -->
+					<div class="accordion-item">
+						<button class="accordion-header blue" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-5">
+							<span class="accordion-title">And More (Roadmap)</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-5" class="accordion-body" hidden>
+							<ul>
+								<li>Priority/search/filter/sort improvements</li>
+								<li>Drag & drop enhancements</li>
+								<li>Smarter Pomodoro cycles</li>
+								<li>Advanced stats and exports</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- About Me -->
+					<div class="accordion-item">
+						<button class="accordion-header orange" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-me">
+							<span class="accordion-title">About Me</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-me" class="accordion-body" hidden>
+							<p>Hi, I’m the developer of this project. I focus on clean UI, reliable offline experiences, and helpful productivity tools.</p>
+						</div>
+					</div>
+
+					<!-- Contact / Support -->
+					<div class="accordion-item">
+						<button class="accordion-header green" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-contact">
+							<span class="accordion-title">Contact / Support</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-contact" class="accordion-body" hidden>
+							<p>Email: <span id="about-email-main" class="copyable" title="Click to copy" style="cursor:pointer;">support@example.com</span></p>
+							<p>GitHub: <a href="#" class="nav-link">Repository</a></p>
+						</div>
+					</div>
+
+					<!-- Data & Privacy -->
+					<div class="accordion-item">
+						<button class="accordion-header green" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-6">
+							<span class="accordion-title">Data & Privacy</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-6" class="accordion-body" hidden>
+							<p>All data stays in your browser. You can clear it anytime via your browser settings. No servers, no accounts.</p>
+						</div>
+					</div>
+
+					<!-- Contributing & License -->
+					<div class="accordion-item">
+						<button class="accordion-header purple" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-7">
+							<span class="accordion-title">Contributing & License</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-7" class="accordion-body" hidden>
+							<p>Contributions welcome! Submit issues or PRs on GitHub. Licensed under MIT.</p>
+							<p>Contact: <span id="about-email" class="copyable" title="Click to copy" style="cursor:pointer;">support@example.com</span></p>
+						</div>
+					</div>
+
+					<!-- FAQ -->
+					<div class="accordion-item">
+						<button class="accordion-header gray" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-8">
+							<span class="accordion-title">FAQ</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-8" class="accordion-body" hidden>
+							<p><strong>Q:</strong> Does it require an account?<br><strong>A:</strong> No, everything is local to your browser.</p>
+						</div>
+					</div>
+
+					<!-- Changelog -->
+					<div class="accordion-item">
+						<button class="accordion-header blue" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-9">
+							<span class="accordion-title">Changelog</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-9" class="accordion-body" hidden>
+							<table style="width:100%; border-collapse:collapse; font-size:14px;">
+								<tr><th style="text-align:left; padding:6px;">Version</th><th style="text-align:left; padding:6px;">Notes</th></tr>
+								<tr><td style="padding:6px;">1.2</td><td style="padding:6px;">Added About page & accordion, improved reminders</td></tr>
+								<tr><td style="padding:6px;">1.1</td><td style="padding:6px;">Phase 2 features merged into Home</td></tr>
+								<tr><td style="padding:6px;">1.0</td><td style="padding:6px;">Initial release</td></tr>
+							</table>
+						</div>
+					</div>
+
+					<!-- Contact / Support -->
+					<div class="accordion-item">
+						<button class="accordion-header green" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-panel-10">
+							<span class="accordion-title">Contact / Support</span>
+							<span class="accordion-icon">▸</span>
+						</button>
+						<div id="acc-panel-10" class="accordion-body" hidden>
+							<p>Email: <span id="about-email-2" class="copyable" title="Click to copy" style="cursor:pointer;">support@example.com</span></p>
+							<p>GitHub: <a href="#" class="nav-link">Repository</a></p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="footer glass">
+			<p>© 2025 Task Manager | Designed with Mohammad Zakariya</p>
+		</footer>
+	</div>
+
+	<!-- Theme Switcher Floating Button -->
+	<button id="theme-btn" class="theme-btn" aria-haspopup="true" aria-expanded="false" aria-controls="theme-menu" title="Change theme">🎨</button>
+	<div id="theme-menu" class="theme-menu" role="menu" aria-hidden="true">
+		<button class="theme-option preview light" data-theme="light" role="menuitem" aria-label="Light – Bubbles">
+			<span class="thumb"><span class="thumb-bubbles"></span></span>
+			<span class="label">Light</span>
+			<span class="hint">Light – Bubbles</span>
+		</button>
+		<button class="theme-option preview dark" data-theme="dark" role="menuitem" aria-label="Dark – Honeycomb">
+			<span class="thumb"><span class="thumb-honey"></span></span>
+			<span class="label">Dark</span>
+			<span class="hint">Dark – Honeycomb</span>
+		</button>
+		<button class="theme-option preview multi" data-theme="multicolor" role="menuitem" aria-label="Multicolor – Aurora">
+			<span class="thumb"><span class="thumb-aurora"></span></span>
+			<span class="label">Multicolor</span>
+			<span class="hint">Multicolor – Aurora</span>
+		</button>
+	</div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-content">
+            <h3 id="notification-title">Notification</h3>
+            <p id="notification-message">Message here</p>
+            <button id="notification-close" class="btn primary">OK</button>
+        </div>
+    </div>	
+
+	<script defer src="script.js"></script>
+</body>
+</html>
+
+
